@@ -53,7 +53,7 @@ class XMLConverterTestCase(TestCase):
             result,
         )
 
-    def test_complex_Wwith_same_sub_nodes(self):
+    def test_complex_with_same_sub_nodes(self):
         result = xml_to_dict(
             '<TestRoot><Address><StreetLine1>400 Market St.</StreetLine1></Address><Address>SP</Address></TestRoot>'
         )
