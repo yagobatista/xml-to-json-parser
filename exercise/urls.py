@@ -24,6 +24,6 @@ router.register('converter', api.ConverterViewSet, basename='converter')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('connected/', views.upload_page),
+    path('connected/', views.ConnectedView.as_view()),
     path('api/', include(router.urls)),
 ]
