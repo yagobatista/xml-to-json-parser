@@ -1,9 +1,9 @@
-from unittest import TestCase
+from django.test import SimpleTestCase
 
-from converter.converter import xml_to_dict
+from xml_converter.converter.converter import xml_to_dict
 
 
-class XMLConverterTestCase(TestCase):
+class XMLConverterTestCase(SimpleTestCase):
 
     def test_empty_file(self):
         result = xml_to_dict("")

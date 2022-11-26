@@ -1,10 +1,121 @@
 <html>
-    <head></head>
-    <body>
-        <p>
-            Modify this page to include a form where users can submit an XML file.
-            When they click on the submit button, the XML file should be converted into JSON and
-            returned to the user.
-        </p>
-    </body>
+
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #242424;
+            color: #fff;
+        }
+
+        h1 {
+            font-weight: bold;
+            margin: 0 0 25px 0;
+        }
+
+        main {
+            display: flex;
+            padding: 20px;
+        }
+
+        textarea {
+            color: #fff;
+            width: 100%;
+            height: 100%;
+            border-radius: 4px;
+            background-color: #1A1A1A;
+        }
+
+        textarea:focus {
+            outline: unset;
+        }
+
+        button {
+            background-color: hsl(204deg 84% 33%);
+            color: #fff;
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 3px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+
+        .bt-upload {
+            color: #fff
+        }
+
+        .bt-upload::file-selector-button {
+            cursor: pointer;
+            padding: 5px;
+            background-color: unset;
+            border: hsl(20deg 60% 50%) solid 1px;
+            color: #fff;
+            border-radius: 2px;
+        }
+
+        column {
+            display: block;
+            padding: 10px;
+        }
+
+        .text-column {
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <column>
+            <h1>Xml to Json parser</h1>
+            {% csrf_token %}
+            <input class="bt-upload" type="file">
+            <button id="submit">Submit</button>
+        </column>
+        <column class="text-column">
+            <textarea id="result" cols="150" rows="50"></textarea>
+        </column>
+    </main>
+
+    <script>
+        const handleError = (status, data) => {
+            if (data.file) {
+                return alert(`File error: ${data.file}`)
+            }
+
+            alert("a unexpected error has accorded, please se the log for more information")
+            console.error("Errors -> ", data)
+        }
+        document.getElementById('submit').onclick = () => {
+            const input = document.querySelector('[type="file"]');
+            const auth = document.querySelector('[name="csrfmiddlewaretoken"]');
+
+            let formData = new FormData()
+            formData.append("file", input.files[0])
+
+            fetch("", {
+                method: "post",
+                body: formData,
+                headers: {
+                    "X-CSRFToken": auth.value,
+                },
+            }).
+                then(response => {
+                    response.json().then(data => {
+                        if (response.status !== 200) {
+                            return handleError(status, data)
+                        }
+
+                        const container = document.querySelector('#result');
+                        container.value = JSON.stringify(data, null, 2)
+
+                    })
+                })
+        }
+    </script>
+</body>
+
 </html>
