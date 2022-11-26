@@ -1,37 +1,47 @@
 def xml_to_dict(file: str) -> dict:
+    data = __xml_converter(file)
+    if len(data) == 0:
+        return {}
+
+    return data[0]
+
+
+def __xml_converter(file: str) -> list:
     clean_file = file.replace(
         '<?xml version="1.0"?>',
         '',
     ).replace('\n', '').strip()
-    result = {}
+    result = []
     index = 0
 
     while index < len(clean_file):
-        opening_tag, start, end, content = convertNode(
+        opening_tag, start, end, content = convertTag(
             clean_file, index,
         )
 
-        tag, _ = get_tag(content, 0)
-        has_no_sub_tag = tag == ""
-        if has_no_sub_tag:
-            result[opening_tag] = content
+        if not contains_tag(content):
+            result.append({opening_tag: content})
             index = end + 1
             continue
 
         startIndex = start + 1
         endIndex = end - len(opening_tag) - 2
 
-        slice = clean_file[startIndex:endIndex]
+        sub_tags = __xml_converter(clean_file[startIndex:endIndex])
 
-        sub_tags = xml_to_dict(slice)
-        result[opening_tag] = [{key: sub_tags[key]} for key in sub_tags]
+        result.append({opening_tag: sub_tags})
 
         index = end + 1
 
     return result
 
 
-def convertNode(clean_file, index):
+def contains_tag(content):
+    tag, _ = get_tag(content, 0)
+    return tag != ""
+
+
+def convertTag(clean_file, index):
     opening_tag, start = get_tag(clean_file, index)
     closing_tag, end = get_closing_tag(clean_file, opening_tag, start)
 
