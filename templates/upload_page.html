@@ -1,10 +1,53 @@
 <html>
-    <head></head>
-    <body>
-        <p>
-            Modify this page to include a form where users can submit an XML file.
-            When they click on the submit button, the XML file should be converted into JSON and
-            returned to the user.
-        </p>
-    </body>
+
+<head></head>
+
+<body>
+    <h1>Xml to json parser</h1>
+
+    {% csrf_token %}
+
+    <input type="file">
+    <button id="submit">Submit</button>
+    <h2>result</h2>
+    <textarea id="result" cols="150" rows="50"></textarea>
+
+    <script>
+        const handleError = (status, data) => {
+            if (data.file) {
+                return alert(`File error: ${data.file}`)
+            }
+
+            alert("a unexpected error has accorded, please se the log for more information")
+            console.error("Errors -> ", data)
+        }
+        document.getElementById('submit').onclick = () => {
+            const input = document.querySelector('[type="file"]');
+            const auth = document.querySelector('[name="csrfmiddlewaretoken"]');
+
+            let formData = new FormData()
+            formData.append("file", input.files[0])
+
+            fetch("", {
+                method: "post",
+                body: formData,
+                headers: {
+                    "X-CSRFToken": auth.value,
+                },
+            }).
+                then(response => {
+                    response.json().then(data => {
+                        if (response.status !== 200) {
+                            return handleError(status, data)
+                        }
+
+                        const container = document.querySelector('#result');
+                        container.value = JSON.stringify(data, null, 2)
+
+                    })
+                })
+        }
+    </script>
+</body>
+
 </html>
