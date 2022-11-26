@@ -1,16 +1,84 @@
 <html>
 
-<head></head>
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #242424;
+            color: #fff;
+        }
+
+        h1 {
+            font-weight: bold;
+            margin: 0 0 25px 0;
+        }
+
+        main {
+            display: flex;
+            padding: 20px;
+        }
+
+        textarea {
+            color: #fff;
+            width: 100%;
+            height: 100%;
+            border-radius: 4px;
+            background-color: #1A1A1A;
+        }
+
+        textarea:focus {
+            outline: unset;
+        }
+
+        button {
+            background-color: hsl(204deg 84% 33%);
+            color: #fff;
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 3px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+
+        .bt-upload {
+            color: #fff
+        }
+
+        .bt-upload::file-selector-button {
+            cursor: pointer;
+            padding: 5px;
+            background-color: unset;
+            border: hsl(20deg 60% 50%) solid 1px;
+            color: #fff;
+            border-radius: 2px;
+        }
+
+        column {
+            display: block;
+            padding: 10px;
+        }
+
+        .text-column {
+            width: 100%;
+        }
+    </style>
+</head>
 
 <body>
-    <h1>Xml to json parser</h1>
-
-    {% csrf_token %}
-
-    <input type="file">
-    <button id="submit">Submit</button>
-    <h2>result</h2>
-    <textarea id="result" cols="150" rows="50"></textarea>
+    <main>
+        <column>
+            <h1>Xml to Json parser</h1>
+            {% csrf_token %}
+            <input class="bt-upload" type="file">
+            <button id="submit">Submit</button>
+        </column>
+        <column class="text-column">
+            <textarea id="result" cols="150" rows="50"></textarea>
+        </column>
+    </main>
 
     <script>
         const handleError = (status, data) => {
